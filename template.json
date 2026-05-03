@@ -1,0 +1,63 @@
+{
+    "name": "Human",
+    "class": "man",
+    "extra": {
+        "birthdate": "",
+        "birthplace_name": "",
+        "birth_address1": "",
+        "birth_address2": "",
+        "birth_city": "",
+        "birth_state_province": "",
+        "birth_country": "Independent India",
+        "married_to": "Wife",
+        "married_date": "",
+        "married_place": "",
+        "married_city": "",
+        "married_state": "",
+        "deathdate": "",
+        "deathplace_name": "",
+        "death_address1": "",
+        "death_address2": "",
+        "death_city": "",
+        "death_state_province": "",
+        "death_country": "",
+        "buried": "",
+        "buried_link": "",
+        "buried_grave": "",
+        "notes": ""
+    },
+    "marriages": [
+        {
+            "spouse": {
+                "name": "Wife",
+                "class": "woman",
+                "extra": {
+                    "birthdate": "",
+                    "birthplace_name": "",
+                    "birth_address1": "",
+                    "birth_address2": "",
+                    "birth_city": "",
+                    "birth_state_province": "",
+                    "birth_country": "",
+                    "married_to": "",
+                    "married_date": "",
+                    "married_place": "",
+                    "married_city": "",
+                    "married_state": "",
+                    "deathdate": "",
+                    "deathplace_name": "",
+                    "death_address1": "",
+                    "death_address2": "",
+                    "death_city": "",
+                    "death_state_province": "",
+                    "death_country": "",
+                    "buried": "",
+                    "buried_link":"",
+                    "buried_grave": "",
+                    "notes": ""
+                }
+            },
+            "children": []
+        }
+    ]
+}

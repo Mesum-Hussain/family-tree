@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+  <title>Mir Fida Ali Family Tree</title>
+
+  <link rel="stylesheet" href="css/style-index.css">
+
+  <script src="js/resources/lodash.min.js"></script>
+  <script src="js/resources/d3.v4.min.js"></script>
+  <script src="js/resources/jquery.min.js"></script>
+
+  <script src="js/resources/dTree.min.js"></script>
+  <script src="js/info.js"></script>
+</head>
+
+<body>
+  <header class="page-header">
+    <div class="title-wrap">
+      <h1>Mir Fida Ali (r.a.) Family Tree</h1>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot legend-man"></span>Man</div>
+        <div class="legend-item"><span class="legend-dot legend-woman"></span>Woman</div>
+        <div class="legend-item"><span class="legend-dot legend-repeated"></span>Repeated</div>
+      </div>
+    </div>
+    <form id="tree-search-form" class="search-form" autocomplete="off">
+      <input id="tree-search-input" type="text" placeholder="Search a name" aria-label="Search family tree by name">
+    </form>
+  </header>
+
+  <div class="search-wrap">
+    <p id="tree-search-status" class="search-status" aria-live="polite"></p>
+  </div>
+
+  <main id="graph"></main>
+
+  <script src="js/data/data.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>

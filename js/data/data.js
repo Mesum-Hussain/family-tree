@@ -2529,6 +2529,36 @@ var treeData = [
                                                                                              "notes": ""
                                                                                           },
                                                                                           "marriages": []
+                                                                                       },
+                                                                                       {
+                                                                                          "name": "Mohammed Hasan Ali",
+                                                                                          "class": "man",
+                                                                                          "extra": {
+                                                                                             "birthdate": "",
+                                                                                             "birthplace_name": "",
+                                                                                             "birth_address1": "",
+                                                                                             "birth_address2": "",
+                                                                                             "birth_city": "",
+                                                                                             "birth_state_province": "",
+                                                                                             "birth_country": "Independent India",
+                                                                                             "married_to": "",
+                                                                                             "married_date": "",
+                                                                                             "married_place": "",
+                                                                                             "married_city": "",
+                                                                                             "married_state": "",
+                                                                                             "deathdate": "",
+                                                                                             "deathplace_name": "",
+                                                                                             "death_address1": "",
+                                                                                             "death_address2": "",
+                                                                                             "death_city": "",
+                                                                                             "death_state_province": "",
+                                                                                             "death_country": "",
+                                                                                             "buried": "",
+                                                                                             "buried_link": "",
+                                                                                             "buried_grave": "",
+                                                                                             "notes": ""
+                                                                                          },
+                                                                                          "marriages": []
                                                                                        }
                                                                                     ]
                                                                                  }
@@ -3619,7 +3649,7 @@ var treeData = [
                                                                               "death_state_province": "",
                                                                               "death_country": "",
                                                                               "buried": "Daira Mir Momin",
-                                                                              "buried_link": "https://www.google.com/maps/place/Al+Huda+International+School/@24.9064416,67.0794198,17z/data=!3m1!4b1!4m6!3m5!1s0x3eb33e9c9c2a7d9f:0x2b8e7c8a1d5e7c8b!8m2!3d24.9064416!4d67.0794198!16s%2Fg%2F11gxd_q22g?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D",
+                                                                              "buried_link": "https://www.google.com/maps/place/Daira+Mir+Momin+Astarabadi/@17.3529371,78.4783912,868m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3bcb981e8780c57b:0x51b53fd56f026df8!8m2!3d17.3529371!4d78.4783912!16s%2Fg%2F11gxd_q22g?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D",
                                                                               "buried_grave": "",
                                                                               "notes": ""
                                                                            }

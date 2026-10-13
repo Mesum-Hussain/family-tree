@@ -61,19 +61,19 @@ var tree = dTree.init(treeData,
 									if ( extra.notes == null ) notes = '';
 								}
 								
-				                $('body').on('click', 'foreignObject', function(){
-									let $node = $(this).children('div');
-									highlightLinkedNodesFromNode($node);
-									let bgcolor;
-									$node.hasClass('man')
-										? bgcolor = getThemeColor('--man-hover-color', 'hsl(190, 87%, 56%)')
-										: bgcolor = getThemeColor('--woman-hover-color', 'hsl(300, 73%, 53%)');
-									if ($('.info').is(':visible')){
-										$('.info').html('<div id=\'close\'>&times;</div><span style=\'font-size: 1rem;\'>'+name + '</span>' + bdate + bpname + bpadd1 + bpadd2 + bcity + bstate + bcountry + mto + mdate + mdname + mcity + mstate + link+'<hr />'+ ddate + dpname +dpadd1 + dpadd2 + dcity + dstate + dcountry + buried + buried_link + buried_grave + notes).css({'background-color':bgcolor});
-									} else {
-										$('#graph').append('<div class=\'info\' style=\'background-color:'+bgcolor+'\'><div id=\'close\'>&times;</div><span style=\'font-size: 1rem;\'>' + name + '</span>' + bdate + bpname + bpadd1 + bpadd2 + bcity + bstate + bcountry + mto + mdate + mdname + mcity + mstate + link+'<hr />'+ ddate + dpname +dpadd1 + dpadd2 + dcity + dstate + dcountry + buried + buried_link + buried_grave + notes + '</div>');
-									}
-				                });
+								var node = this.querySelector(':scope > div');
+								highlightLinkedNodesFromNode(node);
+								var bgcolor = node.classList.contains('man')
+									? getThemeColor('--man-hover-color', 'hsl(190, 87%, 56%)')
+									: getThemeColor('--woman-hover-color', 'hsl(300, 73%, 53%)');
+								var info = document.querySelector('.info');
+								if (!info) {
+									info = document.createElement('div');
+									info.className = 'info';
+									document.getElementById('graph').appendChild(info);
+								}
+								info.style.backgroundColor = bgcolor;
+								info.innerHTML = '<div id=\'close\'>&times;</div><span style=\'font-size: 1rem;\'>'+name + '</span>' + bdate + bpname + bpadd1 + bpadd2 + bcity + bstate + bcountry + mto + mdate + mdname + mcity + mstate + link+'<hr />'+ ddate + dpname +dpadd1 + dpadd2 + dcity + dstate + dcountry + buried + buried_link + buried_grave + notes;
 								
 							},
 							//nodeRightClick: function(name, extra) {
@@ -110,44 +110,54 @@ function normalizeNodeName(name) {
 	return (name || '').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
-function getNodeDisplayName($node) {
-	return $node
-		.find('p')
-		.first()
-		.clone()
-		.children()
-		.remove()
-		.end()
-		.text()
-		.trim();
+function getTreeNodes() {
+	return Array.prototype.slice.call(document.querySelectorAll('foreignObject > div'));
+}
+
+// The name is the text directly inside the first <p>, without the nested date lines.
+function getNodeDisplayName(node) {
+	var paragraph = node.querySelector('p');
+	if (!paragraph) {
+		return '';
+	}
+
+	var text = '';
+	paragraph.childNodes.forEach(function(child) {
+		if (child.nodeType === Node.TEXT_NODE) {
+			text += child.nodeValue;
+		}
+	});
+	return text.trim();
 }
 
 function highlightLinkedNodesByDisplayName(displayName) {
 	var normalizedTarget = normalizeNodeName(displayName);
-	var $matches = $();
-
-	$('foreignObject > div').each(function() {
-		var $candidate = $(this);
-		var candidateName = normalizeNodeName(getNodeDisplayName($candidate));
-		if (candidateName === normalizedTarget) {
-			$matches = $matches.add($candidate);
-		}
+	var matches = getTreeNodes().filter(function(candidate) {
+		return normalizeNodeName(getNodeDisplayName(candidate)) === normalizedTarget;
 	});
 
-	var matchCount = $matches.length;
-	if (matchCount > 1) {
-		$matches.addClass('duplicate-highlight');
-	} else {
-		$matches.addClass('search-highlight');
-	}
+	var highlightClass = matches.length > 1 ? 'duplicate-highlight' : 'search-highlight';
+	matches.forEach(function(match) {
+		match.classList.add(highlightClass);
+	});
 
-	return matchCount;
+	return matches.length;
 }
 
-function highlightLinkedNodesFromNode($node) {
+// "Unknown" stands for someone whose name was not recorded, so nodes sharing it are different people.
+function isPlaceholderName(name) {
+	return normalizeNodeName(name) === 'unknown';
+}
+
+function highlightLinkedNodesFromNode(node) {
 	clearSearchHighlight();
-	var displayName = getNodeDisplayName($node);
-	var matchCount = highlightLinkedNodesByDisplayName(displayName);
+	var displayName = getNodeDisplayName(node);
+	var matchCount = 1;
+	if (isPlaceholderName(displayName)) {
+		node.classList.add('search-highlight');
+	} else {
+		matchCount = highlightLinkedNodesByDisplayName(displayName);
+	}
 	return {
 		displayName: displayName,
 		matchCount: matchCount
@@ -160,72 +170,72 @@ function findNodeByName(searchTerm) {
 		return null;
 	}
 
-	var matchedNode = null;
-
-	$('foreignObject > div').each(function() {
-		var $node = $(this);
-		var nodeName = normalizeNodeName(getNodeDisplayName($node));
-
-		if (nodeName === normalizedSearch) {
-			matchedNode = $node;
-			return false;
-		}
+	var names = getTreeNodes().map(function(node) {
+		return { node: node, name: normalizeNodeName(getNodeDisplayName(node)) };
+	}).filter(function(entry) {
+		return !isPlaceholderName(entry.name);
 	});
 
-	if (matchedNode) {
-		return matchedNode;
-	}
-
-	$('foreignObject > div').each(function() {
-		var $node = $(this);
-		var nodeName = normalizeNodeName(getNodeDisplayName($node));
-
-		if (nodeName.indexOf(normalizedSearch) !== -1) {
-			matchedNode = $node;
-			return false;
-		}
+	var match = names.find(function(entry) {
+		return entry.name === normalizedSearch;
+	}) || names.find(function(entry) {
+		return entry.name.indexOf(normalizedSearch) !== -1;
 	});
 
-	return matchedNode;
+	return match ? match.node : null;
 }
 
 function clearSearchHighlight() {
-	$('foreignObject > div.search-highlight, foreignObject > div.duplicate-highlight')
-		.removeClass('search-highlight duplicate-highlight');
+	document.querySelectorAll('foreignObject > div.search-highlight, foreignObject > div.duplicate-highlight')
+		.forEach(function(node) {
+			node.classList.remove('search-highlight', 'duplicate-highlight');
+		});
 }
 
 function focusNodeFromSearch(searchTerm) {
-	var $status = $('#tree-search-status');
+	var status = document.getElementById('tree-search-status');
 	clearSearchHighlight();
 
-	var $node = findNodeByName(searchTerm);
-	if (!$node || !$node.length) {
-		$status.text('No matching name found.');
+	if (isPlaceholderName(searchTerm)) {
+		status.textContent = 'Invalid: Unknown is not a person.';
 		return;
 	}
 
-	var nodeIdAttr = $node.attr('id');
+	var node = findNodeByName(searchTerm);
+	if (!node) {
+		status.textContent = 'No matching name found.';
+		return;
+	}
+
+	var nodeIdAttr = node.getAttribute('id');
 	if (!nodeIdAttr) {
-		$status.text('Node found, but could not focus it.');
+		status.textContent = 'Node found, but could not focus it.';
 		return;
 	}
 
 	var nodeId = parseInt(nodeIdAttr.replace('node', ''), 10);
-	highlightLinkedNodesFromNode($node);
+	status.textContent = '';
+	highlightLinkedNodesFromNode(node);
 	if (!isNaN(nodeId)) {
 		tree.zoomToNode(nodeId, 3, 700);
 	}
 }
 
-$('#tree-search-form').on('submit', function(event) {
+document.getElementById('tree-search-form').addEventListener('submit', function(event) {
 	event.preventDefault();
-	focusNodeFromSearch($('#tree-search-input').val());
+	focusNodeFromSearch(document.getElementById('tree-search-input').value);
 });
 
-$('#tree-search-input').on('keydown', function(event) {
+document.getElementById('tree-search-input').addEventListener('input', function() {
+	if (this.value === '') {
+		document.getElementById('tree-search-status').textContent = '';
+	}
+});
+
+document.getElementById('tree-search-input').addEventListener('keydown', function(event) {
 	if (event.key === 'Escape') {
-		$(this).val('');
-		$('#tree-search-status').text('');
+		this.value = '';
+		document.getElementById('tree-search-status').textContent = '';
 		clearSearchHighlight();
 	}
 });

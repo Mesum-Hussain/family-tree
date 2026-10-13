@@ -46,8 +46,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var height = opts.height + opts.margin.top + opts.margin.bottom;
 
         // create zoom handler
-        var zoom = this.zoom = d3.zoom().scaleExtent([0.1, 10]).on('zoom', function () {
-          g.attr('transform', d3.event.transform);
+        var zoom = this.zoom = d3.zoom().scaleExtent([0.1, 10]).on('zoom', function (event) {
+          g.attr('transform', event.transform);
         });
 
         // make a svg
@@ -126,13 +126,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           } else {
             return opts.callbacks.nodeRenderer.call(this, d.data.name, d.x, d.y, nodeSize[0], nodeSize[1], d.data.extra, d.data.id, d.data['class'], d.data.textClass, opts.callbacks.textRenderer);
           }
-        }).on('dblclick', function () {
+        }).on('dblclick', function (event) {
           // do not propagate a double click on a node
           // to prevent the zoom from being triggered
-          d3.event.stopPropagation();
-        }).on('click', function (d) {
+          event.stopPropagation();
+        }).on('click', function (event, d) {
           // ignore double-clicks and clicks on hidden nodes
-          if (d3.event.detail === 2 || d.data.hidden) {
+          if (event.detail === 2 || d.data.hidden) {
             return;
           }
           if (d.data.isMarriage) {
@@ -140,11 +140,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           } else {
             opts.callbacks.nodeClick.call(this, d.data.name, d.data.extra, d.data.id);
           }
-        }).on('contextmenu', function (d) {
+        }).on('contextmenu', function (event, d) {
           if (d.data.hidden) {
             return;
           }
-          d3.event.preventDefault();
+          event.preventDefault();
           if (d.data.isMarriage) {
             opts.callbacks.marriageRightClick.call(this, d.data.extra, d.data.id);
           } else {

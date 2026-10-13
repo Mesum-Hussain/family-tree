@@ -2,8 +2,8 @@
 # Builds Shajra.html: index.html with every local stylesheet and script inlined,
 # so the whole tree can be shared as one file that works offline.
 #
-#   ./build.sh           write Shajra.html
-#   ./build.sh --check   exit 1 if Shajra.html is missing or out of date
+#   ./shajra_builder.sh           write Shajra.html
+#   ./shajra_builder.sh --check   exit 1 if Shajra.html is missing or out of date
 #
 # Any problem aborts the build and leaves Shajra.html untouched.
 
@@ -124,7 +124,7 @@ size="$(( $(wc -c < "$temporary") / 1024 )) KB"
 
 if [[ ${1:-} == --check ]]; then
 	if ! cmp -s "$temporary" "$OUTPUT"; then
-		echo "$OUTPUT is missing or out of date; run: ./build.sh" >&2
+		echo "$OUTPUT is missing or out of date; run: ./shajra_builder.sh" >&2
 		exit 1
 	fi
 	echo "$OUTPUT is up to date ($size)."

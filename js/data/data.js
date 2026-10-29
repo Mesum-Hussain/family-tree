@@ -6532,7 +6532,7 @@ var treeData = [
                                           ]
                                        },
                                        {
-                                          "name": "Qursheed Hussain",
+                                          "name": "Khursheed Hussain",
                                           "class": "man",
                                           "extra": {
                                              "birthdate": "",
